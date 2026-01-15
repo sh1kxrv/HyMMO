@@ -1,4 +1,4 @@
-package ru.shikaru.hymmo.datasource;
+package ru.shikaru.hymmo.core.datasource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

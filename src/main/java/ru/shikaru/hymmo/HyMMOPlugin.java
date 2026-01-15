@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
-import ru.shikaru.hymmo.datasource.DataSourceFactory;
+import ru.shikaru.hymmo.core.datasource.DataSourceFactory;
 
 public class HyMMOPlugin extends JavaPlugin {
     private static HyMMOPlugin instance;
