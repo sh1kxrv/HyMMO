@@ -1,7 +1,9 @@
 [versions]
 h2 = "2.4.240"
 sqlite = "3.50.2.0"
+hikari  = "7.0.2"
 
 [libraries]
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 sqlite-jdbc = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "sqlite" }
+hikari-cp = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikari" }

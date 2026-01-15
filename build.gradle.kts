@@ -40,7 +40,6 @@ spotless {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(javaVersion.get())
-    withSourcesJar()
 }
 
 repositories {
@@ -51,8 +50,13 @@ dependencies {
     compileOnly(files(serverJar))
     runtimeOnly(files(serverJar))
 
-    // Database
+    // Lib's
+    add("inShadow", libs.hikari.cp)
     add("inShadow", libs.h2)
+    add("inShadow", "org.slf4j:slf4j-simple:2.0.17")
+    add("inShadow", "net.objecthunter:exp4j:0.4.8")
+
+    // Driver
     add("inShadow", libs.sqlite.jdbc)
 }
 
@@ -62,7 +66,9 @@ tasks {
         configurations = listOf(project.configurations.getByName("inShadow"))
 
         mergeServiceFiles()
-        minimize()
+        minimize {
+            exclude(dependency("org.xerial:sqlite-jdbc"))
+        }
 
         manifest {
             attributes(
@@ -70,6 +76,7 @@ tasks {
             )
         }
     }
+
     jar {
         enabled = false
     }
