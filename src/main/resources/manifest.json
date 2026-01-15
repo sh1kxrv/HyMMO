@@ -1,11 +1,11 @@
 {
-  "Group": "Example",
-  "Name": "ExamplePlugin",
+  "Group": "Shikaru",
+  "Name": "HyMMO",
   "Version": "1.0.0",
   "Description": "",
   "Authors": [
     {
-      "Name": "YourName"
+      "Name": "Shikaru"
     }
   ],
   "Website": "#",
@@ -13,6 +13,6 @@
   "Dependencies": {},
   "OptionalDependencies": {},
   "DisabledByDefault": false,
-  "Main": "com.example.examplePlugin.ExamplePlugin",
+  "Main": "ru.shikaru.hymmo.HyMMOPlugin",
   "IncludesAssetPack": true
 }

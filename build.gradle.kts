@@ -3,8 +3,11 @@ import org.jetbrains.gradle.ext.settings
 import org.jetbrains.gradle.ext.Application
 
 plugins {
+    id("idea")
     id("java")
-    id("org.jetbrains.gradle.plugin.idea-ext").version("1.3")
+    id("org.jetbrains.gradle.plugin.idea-ext") version "1.3"
+    id("com.diffplug.spotless") version "8.1.0"
+    id("com.gradleup.shadow") version "9.3.0"
 }
 
 group = providers.gradleProperty("group").get()
@@ -19,6 +22,22 @@ val hytaleHome = "$gamePath\\install"
 val patchLine = providers.gradleProperty("patch_line")
 val assetsPath = "${hytaleHome}/${patchLine.get()}/package/game/latest/Assets.zip"
 
+configurations {
+    create("inShadow")
+    implementation.get().extendsFrom(getByName("inShadow"))
+}
+
+spotless {
+    java {
+        endWithNewline()
+        importOrder("", "java", group.toString(), "\\#")
+        leadingTabsToSpaces(4)
+        removeUnusedImports()
+        trimTrailingWhitespace()
+    }
+}
+
+
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(javaVersion.get())
     withSourcesJar()
@@ -29,31 +48,48 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation(files(serverJar))
+    compileOnly(files(serverJar))
+    runtimeOnly(files(serverJar))
+
+    // Database
+    add("inShadow", libs.h2)
+    add("inShadow", libs.sqlite.jdbc)
 }
 
-idea.project.settings {
-    runConfigurations {
-        create<Application>("HytaleServer") {
-            mainClass = "com.hypixel.hytale.Main"
-            moduleName = "${project.idea.module.name}.main"
+tasks {
+    shadowJar {
+        archiveClassifier.set("")
+        configurations = listOf(project.configurations.getByName("inShadow"))
 
-            programParameters =
-                "--allow-op " +
-                "--disable-sentry " +
-                "--assets=${assetsPath} " +
-                "--mods=${file("src/main").absolutePath} " +
-                "--auth-mode=authenticated"
+        mergeServiceFiles()
+        minimize()
 
-            workingDirectory = serverDir.absolutePath
+        manifest {
+            attributes(
+                "Main-Class" to "ru.shikaru.mmo.HytaleMMO"
+            )
         }
     }
-}
+    jar {
+        enabled = false
+    }
 
-tasks.test {
-    useJUnitPlatform()
-}
+    assemble {
+        dependsOn(spotlessApply, shadowJar)
+    }
 
+    register<JavaExec>("runServer") {
+        dependsOn("assemble")
+
+        workingDir = serverDir
+        classpath = files(serverJar)
+
+        args(
+            "--allow-op",
+            "--disable-sentry",
+            "--assets=$assetsPath",
+            "--mods=${file("build/libs").absolutePath}",
+            "--auth-mode=authenticated"
+        )
+    }
+}
