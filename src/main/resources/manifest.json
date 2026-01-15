@@ -1,0 +1,18 @@
+{
+  "Group": "Example",
+  "Name": "ExamplePlugin",
+  "Version": "1.0.0",
+  "Description": "",
+  "Authors": [
+    {
+      "Name": "YourName"
+    }
+  ],
+  "Website": "#",
+  "ServerVersion": "*",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "DisabledByDefault": false,
+  "Main": "com.example.examplePlugin.ExamplePlugin",
+  "IncludesAssetPack": true
+}
