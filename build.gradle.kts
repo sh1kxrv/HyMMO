@@ -53,8 +53,6 @@ dependencies {
     // Lib's
     add("inShadow", libs.hikari.cp)
     add("inShadow", libs.h2)
-    add("inShadow", "org.slf4j:slf4j-simple:2.0.17")
-    add("inShadow", "net.objecthunter:exp4j:0.4.8")
 
     // Driver
     add("inShadow", libs.sqlite.jdbc)
