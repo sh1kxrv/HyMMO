@@ -8,7 +8,7 @@ import ru.shikaru.hymmo.core.datasource.repository.SkillRepository;
 
 import javax.sql.DataSource;
 
-public class DataSourceManager implements IDataSourceManager {
+public final class DataSourceManager implements IDataSourceManager {
     public DataSource dataSource;
 
     public PlayerRepository playerRepository;
@@ -26,7 +26,10 @@ public class DataSourceManager implements IDataSourceManager {
         skillRepository = new SkillRepository(this.dataSource);
 
         playerRepository.createTableIfNotExists();
+
         skillRepository.createTableIfNotExists();
+        skillRepository.bootstrapFromRegistry();
+
         playerSkillRepository.createTableIfNotExists();
     }
 }

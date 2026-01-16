@@ -28,7 +28,7 @@ public class HyMMOPlugin extends JavaPlugin {
         getLogger().at(Level.INFO).log("Registering managers..");
 
         var dataSourceManager = new DataSourceManager();
-        var playerManager = new PlayerManager();
+        var playerManager = new PlayerManager(dataSourceManager);
 
         dataSourceManager.init();
 
