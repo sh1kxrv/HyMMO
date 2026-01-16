@@ -1,6 +1,6 @@
 package ru.shikaru.hymmo.manager;
 
-import ru.shikaru.hymmo.core.api.IManager;
+import ru.shikaru.hymmo.api.manager.IPlayerManager;
 
-public class PlayerManager implements IManager {
+public class PlayerManager implements IPlayerManager {
 }

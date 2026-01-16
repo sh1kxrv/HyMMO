@@ -2,14 +2,12 @@ package ru.shikaru.hymmo;
 
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import ru.shikaru.hymmo.core.manager.ManagerStore;
+import ru.shikaru.hymmo.manager.DataSourceManager;
+import ru.shikaru.hymmo.manager.PlayerManager;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
 import javax.annotation.Nonnull;
-
-import ru.shikaru.hymmo.core.datasource.DataSourceFactory;
+import java.util.logging.Level;
 
 public class HyMMOPlugin extends JavaPlugin {
     private static HyMMOPlugin instance;
@@ -18,23 +16,7 @@ public class HyMMOPlugin extends JavaPlugin {
         super(init);
         instance = this;
 
-        getLogger().at(Level.INFO).log("Creating table's in Database");
-
-        var ds = DataSourceFactory.create("jdbc:sqlite:hymmo.db", 4);
-        var sql = """
-            CREATE TABLE IF NOT EXISTS hymmo_players (
-                id VARCHAR(36) PRIMARY KEY,
-                xp BIGINT NOT NULL
-            )
-            """;
-
-        try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        registerManagers();
         registerEvents();
     }
 
@@ -42,6 +24,18 @@ public class HyMMOPlugin extends JavaPlugin {
 
     }
 
+    private void registerManagers() {
+        getLogger().at(Level.INFO).log("Registering managers..");
+
+        var dataSourceManager = new DataSourceManager();
+        var playerManager = new PlayerManager();
+
+        dataSourceManager.init();
+
+        ManagerStore.add(dataSourceManager, playerManager);
+
+        getLogger().at(Level.INFO).log("Manager's is setting up");
+    }
 
     public HyMMOPlugin getInstance(){
         return instance;

@@ -1,5 +1,3 @@
 package ru.shikaru.hymmo.core.datasource.entity;
 
-import java.util.UUID;
-
-public record PlayerEntity(UUID uuid, long xp) { }
+public record PlayerEntity(String uuid, long xp) { }

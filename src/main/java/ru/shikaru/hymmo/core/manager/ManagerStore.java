@@ -1,6 +1,7 @@
 package ru.shikaru.hymmo.core.manager;
 
 import ru.shikaru.hymmo.core.api.IManager;
+import ru.shikaru.hymmo.exception.ManagerGetException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,6 +19,14 @@ public final class ManagerStore {
         return (T) MANAGERS.get(managerClass);
     }
 
+    public static <T extends IManager> T getOrThrow(Class<T> managerClass) {
+        T manager = get(managerClass);
+        if(manager == null) {
+            throw new ManagerGetException("Manager not regstered: "+ managerClass.getName());
+        }
+        return manager;
+    }
+
     public static void remove(Class<? extends IManager> managerClass) {
         IManager manager = MANAGERS.remove(managerClass);
         if (manager != null) {
@@ -33,6 +42,13 @@ public final class ManagerStore {
             throw new IllegalStateException(
                     "Manager already registered: " + clazz.getName()
             );
+        }
+    }
+
+    @SafeVarargs
+    public static <T extends IManager> void add(T... managers) {
+        for (T manager : managers) {
+            add(manager);
         }
     }
 }

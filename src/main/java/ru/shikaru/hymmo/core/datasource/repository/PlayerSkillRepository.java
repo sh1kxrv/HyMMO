@@ -8,25 +8,20 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public final class PlayerRepository implements IRepository {
-    public PlayerRepository() {
-        // ...
-    }
-
+public class PlayerSkillRepository implements IRepository {
     @Override
     public void createTableIfNotExists() {
         var dsManager = ManagerStore.getOrThrow(DataSourceManager.class);
 
         var sql = """
-            CREATE TABLE IF NOT EXISTS hymmo_players (
-                id VARCHAR(36) PRIMARY KEY,
-                xp BIGINT NOT NULL
+            CREATE TABLE IF NOT EXISTS player_skills (
+                id INTEGER PRIMARY KEY,
             )
             """;
 
         try (
-            Connection conn = dsManager.dataSource.getConnection();
-            Statement stmt = conn.createStatement()
+                Connection conn = dsManager.dataSource.getConnection();
+                Statement stmt = conn.createStatement()
         ) {
             stmt.execute(sql);
         } catch (SQLException e) {
