@@ -6,6 +6,7 @@ import ru.shikaru.hymmo.core.util.RowMapper;
 public final class PlayerMapper {
     public static final RowMapper<PlayerEntity> MAPPER = rs -> new PlayerEntity(
             rs.getString("id"),
-            rs.getLong("xp")
+            rs.getLong("xp"),
+            rs.getInt("level")
     );
 }

@@ -51,6 +51,11 @@ public final class XPSystem extends DeathSystems.OnDeathSystem {
                 var maxHealth = healthStat.getMax();
                 var xpAmount = Math.max(1, (long) (maxHealth * DEFAULT_XP_GAIN_PERCENTAGE));
                 var playerManager = ManagerStore.getOrThrow(PlayerManager.class);
+                var playerUUID = player.getUuid();
+                if (playerUUID == null) {
+                    return;
+                }
+                playerManager.addXp(player.getUuid(), xpAmount);
 //                LevelingCoreApi.getLevelServiceIfPresent().ifPresent(levelService -> {
 //                    var levelBefore = levelService.getLevel(player.getUuid());
 //                    // Checks that the SimpleParty plugin is installed

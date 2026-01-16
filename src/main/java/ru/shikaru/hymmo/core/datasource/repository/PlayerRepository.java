@@ -36,9 +36,9 @@ public final class PlayerRepository extends Repository {
 
     public Optional<PlayerEntity> get(String playerId) {
         var sql = """
-        SELECT id, xp, level
-        FROM hymmo_players
-        WHERE id = ?
+            SELECT id, xp, level
+            FROM hymmo_players
+            WHERE id = ?
         """;
 
         return getOne(
@@ -50,8 +50,8 @@ public final class PlayerRepository extends Repository {
 
     public void create(String playerId, long xp, int level) {
         var sql = """
-        INSERT INTO hymmo_players (id, xp)
-        VALUES (?, ?, ?)
+            INSERT INTO hymmo_players (id, xp)
+            VALUES (?, ?, ?)
         """;
 
         try (
@@ -72,9 +72,9 @@ public final class PlayerRepository extends Repository {
 
     public void update(String playerId, long xp, int level) {
         var sql = """
-        UPDATE hymmo_players
-        SET xp = ?, level = ?
-        WHERE id = ?
+            UPDATE hymmo_players
+            SET xp = ?, level = ?
+            WHERE id = ?
         """;
 
         try (

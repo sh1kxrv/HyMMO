@@ -7,6 +7,7 @@ public final class PlayerSkillMapper {
     public static final RowMapper<PlayerSkillEntity> MAPPER = rs -> new PlayerSkillEntity(
             rs.getString("playerId"),
             rs.getInt("skillId"),
-            rs.getLong("xp")
+            rs.getLong("xp"),
+            rs.getInt("level")
     );
 }
