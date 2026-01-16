@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.EntityStatType;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
@@ -17,12 +18,12 @@ import javax.annotation.Nonnull;
 import ru.shikaru.hymmo.hytale.component.PlayerXpComponent;
 import ru.shikaru.hymmo.hytale.lang.Lang;
 
-public final class XPGainSystem extends DeathSystems.OnDeathSystem {
+public final class KillXPGainSystem extends DeathSystems.OnDeathSystem {
     private final double DEFAULT_XP_GAIN_PERCENTAGE = 0.25;
 
     @Override
     public Query<EntityStore> getQuery() {
-        return Query.any();
+        return PlayerRef.getComponentType();
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
 import ru.shikaru.hymmo.hytale.component.PlayerXpComponent;
+import ru.shikaru.hymmo.hytale.component.skills.WoodcuttingSkillComponent;
 
 public class XPRegistrarSystem extends PlayerSystems.PlayerSpawnedSystem {
     @Nonnull
@@ -25,6 +26,14 @@ public class XPRegistrarSystem extends PlayerSystems.PlayerSpawnedSystem {
             if(playerXpData == null) {
                 playerXpData = new PlayerXpComponent();
                 store.addComponent(ref, PlayerXpComponent.getComponentType(), playerXpData);
+            }
+
+            // Skill's
+            // TODO: Optimize it. Maybe create common component with all skills?
+            var woodcuttingCompontnt = store.getComponent(ref, WoodcuttingSkillComponent.getComponentType());
+            if (woodcuttingCompontnt == null) {
+                woodcuttingCompontnt = new WoodcuttingSkillComponent();
+                store.addComponent(ref, WoodcuttingSkillComponent.getComponentType(), woodcuttingCompontnt);
             }
         });
     }

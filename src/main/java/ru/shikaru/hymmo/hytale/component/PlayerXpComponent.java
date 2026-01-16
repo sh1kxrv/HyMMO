@@ -11,21 +11,28 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import ru.shikaru.hymmo.HyMMOPlugin;
+import ru.shikaru.hymmo.hytale.component.api.AbstractExperiencedComponent;
 
-public class PlayerXpComponent implements Component<EntityStore> {
-    public static final BuilderCodec<PlayerXpComponent> CODEC;
-
-    private long xp;
+public class PlayerXpComponent extends AbstractExperiencedComponent implements Component<EntityStore> {
+    public static final BuilderCodec<PlayerXpComponent> CODEC = BuilderCodec.builder(PlayerXpComponent.class, PlayerXpComponent::new)
+            .append(
+                    new KeyedCodec<>("Xp", Codec.LONG),
+                    (p, o) -> p.xp = o,
+                    (g) -> g.xp
+            )
+            .add()
+            .build();
 
     public PlayerXpComponent(){
         this(0L);
     }
 
     public PlayerXpComponent(long xp) {
-        this.xp = xp;
+        super(xp);
     }
 
     public PlayerXpComponent(PlayerXpComponent other) {
+        super(other.xp);
         this.xp = other.xp;
     }
 
@@ -38,40 +45,5 @@ public class PlayerXpComponent implements Component<EntityStore> {
     @Nonnull
     public static ComponentType<EntityStore, PlayerXpComponent> getComponentType(){
         return HyMMOPlugin.get().getPlayerXpDataComponent();
-    }
-
-    public void addXp(long xp){
-        this.xp += xp;
-    }
-
-    public void drainXp(long xp) {
-        this.xp = Math.max(0, this.xp - xp);
-    }
-
-    public long getXp() {
-        return this.xp;
-    }
-
-    public int getLevel(){
-        return HyMMOPlugin.get().getLevelFormula().getLevelForXp(this.xp);
-    }
-
-    public long getXpForLevel(int level) {
-        if (level <= 1) {
-            return 0L;
-        }
-
-        return HyMMOPlugin.get().getLevelFormula().getXpForLevel(level);
-    }
-
-    static {
-        CODEC = BuilderCodec.builder(PlayerXpComponent.class, PlayerXpComponent::new)
-                .append(
-                    new KeyedCodec<>("Xp", Codec.LONG),
-                    (p, o) -> p.xp = o,
-                    (g) -> g.xp
-                )
-            .add()
-            .build();
     }
 }
