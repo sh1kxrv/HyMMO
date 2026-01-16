@@ -21,9 +21,9 @@ public class DataSourceManager implements IDataSourceManager {
 
     @Override
     public void init() {
-        playerRepository = new PlayerRepository();
-        playerSkillRepository = new PlayerSkillRepository();
-        skillRepository = new SkillRepository();
+        playerRepository = new PlayerRepository(this.dataSource);
+        playerSkillRepository = new PlayerSkillRepository(this.dataSource);
+        skillRepository = new SkillRepository(this.dataSource);
 
         playerRepository.createTableIfNotExists();
         skillRepository.createTableIfNotExists();

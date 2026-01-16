@@ -1,14 +1,20 @@
 package ru.shikaru.hymmo.core.datasource.repository;
 
-import ru.shikaru.hymmo.core.api.IRepository;
+import ru.shikaru.hymmo.core.api.Repository;
 import ru.shikaru.hymmo.core.manager.ManagerStore;
 import ru.shikaru.hymmo.manager.DataSourceManager;
 
+import javax.annotation.Nonnull;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SkillRepository implements IRepository {
+public class SkillRepository extends Repository {
+    public SkillRepository(@Nonnull DataSource ds) {
+        super(ds);
+    }
+
     @Override
     public void createTableIfNotExists() {
         var dsManager = ManagerStore.getOrThrow(DataSourceManager.class);
@@ -29,5 +35,9 @@ public class SkillRepository implements IRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void init() {
+
     }
 }
