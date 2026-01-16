@@ -42,19 +42,23 @@ public final class XPGainSystem extends DeathSystems.OnDeathSystem {
                 var player = store.getComponent(attackerRef, Player.getComponentType());
                 if (player == null)
                     return;
+
                 var statMap = store.getComponent(ref, EntityStatMap.getComponentType());
                 if (statMap == null)
                     return;
+
                 var healthIndex = EntityStatType.getAssetMap().getIndex("Health");
                 var healthStat = statMap.get(healthIndex);
                 if (healthStat == null)
                     return;
+
                 var maxHealth = healthStat.getMax();
                 var xpAmount = Math.max(1, (long) (maxHealth * DEFAULT_XP_GAIN_PERCENTAGE));
                 var playerXpData = store.getComponent(attackerRef, PlayerXpComponent.getComponentType());
                 if (playerXpData == null) {
                     return;
                 }
+
                 var oldLevel = playerXpData.getLevel();
 
                 playerXpData.addXp(xpAmount);

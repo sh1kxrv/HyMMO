@@ -8,7 +8,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
 import ru.shikaru.hymmo.api.IFormula;
-import ru.shikaru.hymmo.formula.LinearFormula;
+import ru.shikaru.hymmo.formula.ExpFormula;
 import ru.shikaru.hymmo.hytale.command.XpCommand;
 import ru.shikaru.hymmo.hytale.component.PlayerXpComponent;
 import ru.shikaru.hymmo.hytale.system.XPGainSystem;
@@ -24,7 +24,7 @@ public class HyMMOPlugin extends JavaPlugin {
         super(init);
         instance = this;
 
-        levelFormula = new LinearFormula(100, 1000);
+        levelFormula = new ExpFormula(100, 1.7, 10000);
     }
 
     @Override

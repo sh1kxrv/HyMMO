@@ -16,20 +16,17 @@ public class PlayerXpComponent implements Component<EntityStore> {
     public static final BuilderCodec<PlayerXpComponent> CODEC;
 
     private long xp;
-    private int level;
 
     public PlayerXpComponent(){
-        this(0L, 0);
+        this(0L);
     }
 
-    public PlayerXpComponent(long xp, int level) {
+    public PlayerXpComponent(long xp) {
         this.xp = xp;
-        this.level = level;
     }
 
     public PlayerXpComponent(PlayerXpComponent other) {
         this.xp = other.xp;
-        this.level = other.level;
     }
 
     @Nullable
@@ -74,12 +71,6 @@ public class PlayerXpComponent implements Component<EntityStore> {
                     (p, o) -> p.xp = o,
                     (g) -> g.xp
                 )
-            .add()
-            .append(
-                    new KeyedCodec<>("Level", Codec.INTEGER),
-                    (p, o) -> p.level = o,
-                    (g) -> g.level
-            )
             .add()
             .build();
     }
