@@ -7,6 +7,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
 
+import ru.shikaru.hymmo.api.IFormula;
+import ru.shikaru.hymmo.formula.LinearFormula;
 import ru.shikaru.hymmo.hytale.command.XpCommand;
 import ru.shikaru.hymmo.hytale.component.PlayerXpComponent;
 import ru.shikaru.hymmo.hytale.system.XPGainSystem;
@@ -16,10 +18,13 @@ public class HyMMOPlugin extends JavaPlugin {
     private static HyMMOPlugin instance;
 
     private ComponentType<EntityStore, PlayerXpComponent> playerXpDataComponent;
+    private final IFormula levelFormula;
 
     public HyMMOPlugin(@Nonnull JavaPluginInit init) {
         super(init);
         instance = this;
+
+        levelFormula = new LinearFormula(100, 1000);
     }
 
     @Override
@@ -49,6 +54,10 @@ public class HyMMOPlugin extends JavaPlugin {
 
     public static HyMMOPlugin get(){
         return instance;
+    }
+
+    public IFormula getLevelFormula() {
+        return this.levelFormula;
     }
 
     public ComponentType<EntityStore, PlayerXpComponent> getPlayerXpDataComponent() {

@@ -26,7 +26,6 @@ public class XPRegistrarSystem extends PlayerSystems.PlayerSpawnedSystem {
                 playerXpData = new PlayerXpComponent();
                 store.addComponent(ref, PlayerXpComponent.getComponentType(), playerXpData);
             }
-            // ...
         });
     }
 
@@ -34,6 +33,5 @@ public class XPRegistrarSystem extends PlayerSystems.PlayerSpawnedSystem {
     public void onEntityRemove(@Nonnull Ref ref, @Nonnull RemoveReason removeReason, @Nonnull Store store, @Nonnull CommandBuffer commandBuffer) {
         Player player = (Player) store.getComponent(ref, Player.getComponentType());
         assert player != null;
-        // ...
     }
 }

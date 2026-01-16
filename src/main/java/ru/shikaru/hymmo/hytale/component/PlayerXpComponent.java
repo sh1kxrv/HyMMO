@@ -14,18 +14,22 @@ import ru.shikaru.hymmo.HyMMOPlugin;
 
 public class PlayerXpComponent implements Component<EntityStore> {
     public static final BuilderCodec<PlayerXpComponent> CODEC;
+
     private long xp;
+    private int level;
 
     public PlayerXpComponent(){
-        this(0L);
+        this(0L, 0);
     }
 
-    public PlayerXpComponent(long xp) {
+    public PlayerXpComponent(long xp, int level) {
         this.xp = xp;
+        this.level = level;
     }
 
     public PlayerXpComponent(PlayerXpComponent other) {
         this.xp = other.xp;
+        this.level = other.level;
     }
 
     @Nullable
@@ -51,6 +55,18 @@ public class PlayerXpComponent implements Component<EntityStore> {
         return this.xp;
     }
 
+    public int getLevel(){
+        return HyMMOPlugin.get().getLevelFormula().getLevelForXp(this.xp);
+    }
+
+    public long getXpForLevel(int level) {
+        if (level <= 1) {
+            return 0L;
+        }
+
+        return HyMMOPlugin.get().getLevelFormula().getXpForLevel(level);
+    }
+
     static {
         CODEC = BuilderCodec.builder(PlayerXpComponent.class, PlayerXpComponent::new)
                 .append(
@@ -58,7 +74,13 @@ public class PlayerXpComponent implements Component<EntityStore> {
                     (p, o) -> p.xp = o,
                     (g) -> g.xp
                 )
-                .add()
-                .build();
+            .add()
+            .append(
+                    new KeyedCodec<>("Level", Codec.INTEGER),
+                    (p, o) -> p.level = o,
+                    (g) -> g.level
+            )
+            .add()
+            .build();
     }
 }

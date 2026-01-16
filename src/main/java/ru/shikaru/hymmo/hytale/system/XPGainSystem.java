@@ -15,9 +15,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
 import ru.shikaru.hymmo.hytale.component.PlayerXpComponent;
+import ru.shikaru.hymmo.hytale.lang.Lang;
 
 public final class XPGainSystem extends DeathSystems.OnDeathSystem {
-    private final double DEFAULT_XP_GAIN_PERCENTAGE = 0.5;
+    private final double DEFAULT_XP_GAIN_PERCENTAGE = 0.25;
 
     @Override
     public Query<EntityStore> getQuery() {
@@ -54,7 +55,21 @@ public final class XPGainSystem extends DeathSystems.OnDeathSystem {
                 if (playerXpData == null) {
                     return;
                 }
+                var oldLevel = playerXpData.getLevel();
+
                 playerXpData.addXp(xpAmount);
+                player.sendMessage(
+                    Lang.GAIN_XP.param("xp", xpAmount)
+                );
+
+                var newLevel = playerXpData.getLevel();
+                if(newLevel > oldLevel) {
+                    player.sendMessage(
+                        Lang.LVLUP
+                            .param("oldLevel", oldLevel)
+                            .param("newLevel", newLevel)
+                    );
+                }
             }
         }
     }
