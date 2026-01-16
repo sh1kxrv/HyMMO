@@ -1,43 +1,57 @@
 package ru.shikaru.hymmo;
 
+import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
-import ru.shikaru.hymmo.core.manager.ManagerStore;
-import ru.shikaru.hymmo.manager.DataSourceManager;
-import ru.shikaru.hymmo.manager.PlayerManager;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
-import java.util.logging.Level;
+
+import ru.shikaru.hymmo.hytale.command.XpCommand;
+import ru.shikaru.hymmo.hytale.component.PlayerXpComponent;
+import ru.shikaru.hymmo.hytale.system.XPGainSystem;
+import ru.shikaru.hymmo.hytale.system.XPRegistrarSystem;
 
 public class HyMMOPlugin extends JavaPlugin {
     private static HyMMOPlugin instance;
 
+    private ComponentType<EntityStore, PlayerXpComponent> playerXpDataComponent;
+
     public HyMMOPlugin(@Nonnull JavaPluginInit init) {
         super(init);
         instance = this;
+    }
 
-        registerManagers();
+    @Override
+    protected void setup(){
+        registerCommands();
+        registerComponents();
+        registerSystems();
         registerEvents();
+    }
+
+    private void registerCommands() {
+        this.getCommandRegistry().registerCommand(new XpCommand());
     }
 
     private void registerEvents() {
 
     }
 
-    private void registerManagers() {
-        getLogger().at(Level.INFO).log("Registering managers..");
-
-        var dataSourceManager = new DataSourceManager();
-        var playerManager = new PlayerManager(dataSourceManager);
-
-        dataSourceManager.init();
-
-        ManagerStore.add(dataSourceManager, playerManager);
-
-        getLogger().at(Level.INFO).log("Manager's is setting up");
+    private void registerSystems() {
+        this.getEntityStoreRegistry().registerSystem(new XPRegistrarSystem());
+        this.getEntityStoreRegistry().registerSystem(new XPGainSystem());
     }
 
-    public HyMMOPlugin getInstance(){
+    private void registerComponents() {
+        this.playerXpDataComponent = this.getEntityStoreRegistry().registerComponent(PlayerXpComponent.class, "PlayerXpComponent", PlayerXpComponent.CODEC);
+    }
+
+    public static HyMMOPlugin get(){
         return instance;
+    }
+
+    public ComponentType<EntityStore, PlayerXpComponent> getPlayerXpDataComponent() {
+        return playerXpDataComponent;
     }
 }
