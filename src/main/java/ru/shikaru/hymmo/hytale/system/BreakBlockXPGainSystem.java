@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -18,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import ru.shikaru.hymmo.HyMMOPlugin;
+import ru.shikaru.hymmo.hytale.component.PlayerPlacedBlockComponent;
 import ru.shikaru.hymmo.hytale.component.skills.WoodcuttingSkillComponent;
 import ru.shikaru.hymmo.hytale.lang.Lang;
 
@@ -55,6 +57,8 @@ public final class BreakBlockXPGainSystem extends EntityEventSystem<EntityStore,
             if(itemHand != null) HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Item hand" + itemHand.getItemId());
         }
 
+        var uuid = store.getComponent(ref, UUIDComponent.getComponentType());
+
         var block = event.getBlockType();
         HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Block: %s", block.toString());
 
@@ -72,7 +76,16 @@ public final class BreakBlockXPGainSystem extends EntityEventSystem<EntityStore,
         if(chunkRef != null && chunkRef.isValid()) {
             var blockIndex = ChunkUtil.indexBlockInColumn(blockVec3.x, blockVec3.y, blockVec3.z);
             var chunkStore = chunkRef.getStore();
-            // TODO: Сделать резолов компонента прочесть из него данные
+            var component = chunkStore.getComponent(chunkRef, PlayerPlacedBlockComponent.getComponentType());
+            if(component != null) {
+                HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Component: %b %s %d", component != null, uuid.getUuid(), blockIndex);
+                var hasBlockInComponent = component.has(uuid.getUuid(), blockIndex);
+                HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Has Block in component: %b", hasBlockInComponent);
+                if(hasBlockInComponent) {
+                    HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Block not generated! Skip");
+                    return;
+                }
+            }
 //            var worldChunkComponent = chunkStore.getComponent(chunkRef, WorldChunk.getComponentType());
 //            assert worldChunkComponent != null;
 //            HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Getting block state");

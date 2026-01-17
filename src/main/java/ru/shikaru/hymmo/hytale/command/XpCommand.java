@@ -2,6 +2,7 @@ package ru.shikaru.hymmo.hytale.command;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -12,6 +13,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
 import ru.shikaru.hymmo.hytale.component.PlayerXpComponent;
+import ru.shikaru.hymmo.hytale.component.skills.WoodcuttingSkillComponent;
 import ru.shikaru.hymmo.hytale.lang.Lang;
 
 public class XpCommand extends AbstractPlayerCommand {
@@ -31,5 +33,11 @@ public class XpCommand extends AbstractPlayerCommand {
                         .param("xp", xpComponent.getXp())
                         .param("level", xpComponent.getLevel())
         );
+
+        var woodcuttingSkill = store.getComponent(ref, WoodcuttingSkillComponent.getComponentType());
+
+        assert woodcuttingSkill != null;
+
+        player.sendMessage(Message.raw("XP" + woodcuttingSkill.getXp() + " / " + woodcuttingSkill.getLevel()));;
     }
 }

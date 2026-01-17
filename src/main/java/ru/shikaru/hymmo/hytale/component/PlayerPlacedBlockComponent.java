@@ -26,7 +26,8 @@ public class PlayerPlacedBlockComponent implements Component<ChunkStore> {
                         ppbc.placedBlocksIDs.addAll(Arrays.asList(data));
                     },
                     (ppbc, extra) ->  ppbc.placedBlocksIDs.toArray(new String[]{})
-            ).add().build();
+            )
+            .add().build();
 
     private final Set<String> placedBlocksIDs;
 
@@ -38,13 +39,24 @@ public class PlayerPlacedBlockComponent implements Component<ChunkStore> {
         this.placedBlocksIDs = list;
     }
 
+    public PlayerPlacedBlockComponent(String[] arr) {
+        var hashSet = new HashSet<String>();
+        hashSet.addAll(List.of(arr));
+        this.placedBlocksIDs = hashSet;
+    }
+
     public Set<String> getPlacedBlocksIDs() {
         return placedBlocksIDs;
     }
 
+    public boolean has(UUID playerId, int blockIndex){
+        var fullId = playerId + ":" + blockIndex;
+        return this.placedBlocksIDs.contains(fullId);
+    }
+
     @Override
     public Component<ChunkStore> clone() {
-        return new PlayerPlacedBlockComponent(new HashSet<>());
+        return new PlayerPlacedBlockComponent(this.placedBlocksIDs.toArray(new String[]{}));
     }
 
     @Nonnull
