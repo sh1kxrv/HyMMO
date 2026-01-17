@@ -7,14 +7,9 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
-import com.hypixel.hytale.server.core.modules.interaction.components.PlacedByInteractionComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import com.hypixel.hytale.server.core.universe.world.meta.state.PlacedByBlockState;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
@@ -77,6 +72,7 @@ public final class BreakBlockXPGainSystem extends EntityEventSystem<EntityStore,
         if(chunkRef != null && chunkRef.isValid()) {
             var blockIndex = ChunkUtil.indexBlockInColumn(blockVec3.x, blockVec3.y, blockVec3.z);
             var chunkStore = chunkRef.getStore();
+            // TODO: Сделать резолов компонента прочесть из него данные
 //            var worldChunkComponent = chunkStore.getComponent(chunkRef, WorldChunk.getComponentType());
 //            assert worldChunkComponent != null;
 //            HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Getting block state");

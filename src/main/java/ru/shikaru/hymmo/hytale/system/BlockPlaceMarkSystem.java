@@ -11,18 +11,16 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.PlaceBlockEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import ru.shikaru.hymmo.HyMMOPlugin;
-import ru.shikaru.hymmo.hytale.component.PlayerPlacedBlockComponent;
 
+import java.util.HashSet;
+import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.UUID;
+
+import ru.shikaru.hymmo.HyMMOPlugin;
+import ru.shikaru.hymmo.hytale.component.PlayerPlacedBlockComponent;
 
 public class BlockPlaceMarkSystem extends EntityEventSystem<EntityStore, PlaceBlockEvent> {
     public BlockPlaceMarkSystem() {
@@ -50,18 +48,19 @@ public class BlockPlaceMarkSystem extends EntityEventSystem<EntityStore, PlaceBl
         long chunkIndex = ChunkUtil.indexChunkFromBlock(blockTarget.x, blockTarget.z);
         Ref<ChunkStore> chunkRef = worldChunkStore.getChunkReference(chunkIndex);
         if(chunkRef != null && chunkRef.isValid()) {
+            HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Resolved chunk");
             var blockIndex = ChunkUtil.indexBlockInColumn(blockTarget.x, blockTarget.y, blockTarget.z);
             var chunkStore = chunkRef.getStore();
             var component = chunkStore.getComponent(chunkRef, PlayerPlacedBlockComponent.getComponentType());
+            HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Adding component? :: %b", component != null);
             if(component == null) {
-                var hashMap = new Object2IntOpenHashMap<UUID>();
-                hashMap.addTo(uuid.getUuid(), blockIndex);
-                component = chunkStore.putComponent(chunkRef, new PlayerPlacedBlockComponent(hashMap));
+                var hashMap = new HashSet<String>();
+                hashMap.add(uuid.getUuid() + ":" + blockIndex);
+                chunkStore.addComponent(chunkRef, PlayerPlacedBlockComponent.getComponentType(), new PlayerPlacedBlockComponent(hashMap));
+            } else {
+                component.getPlacedBlocksIDs().add(uuid.getUuid() + ":" + blockIndex);
+                HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Placed blocks: %s", String.join(",", component.getPlacedBlocksIDs()));
             }
-
-//            var worldChunkComponent = chunkStore.getComponent(chunkRef, WorldChunk.getComponentType());
-//            assert worldChunkComponent != null;
-//
         }
     }
 
