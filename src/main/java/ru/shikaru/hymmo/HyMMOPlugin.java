@@ -4,6 +4,7 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
@@ -24,7 +25,7 @@ public class HyMMOPlugin extends JavaPlugin {
 
     private ComponentType<EntityStore, PlayerXpComponent> playerXpDataComponent;
     private ComponentType<EntityStore, WoodcuttingSkillComponent> woodcuttingSkillComponent;
-    private ComponentType<EntityStore, PlayerPlacedBlockComponent> playerPlacedBlockComponent;
+    private ComponentType<ChunkStore, PlayerPlacedBlockComponent> playerPlacedBlockComponent;
     private final IFormula levelFormula;
 
     public final HytaleLogger pluginLogger;
@@ -62,7 +63,7 @@ public class HyMMOPlugin extends JavaPlugin {
     private void registerComponents() {
         this.playerXpDataComponent = this.getEntityStoreRegistry().registerComponent(PlayerXpComponent.class, "PlayerXpComponent", PlayerXpComponent.CODEC);
         this.woodcuttingSkillComponent = this.getEntityStoreRegistry().registerComponent(WoodcuttingSkillComponent.class, "WoodcuttingSkillComponent", WoodcuttingSkillComponent.CODEC);
-        this.playerPlacedBlockComponent = this.getEntityStoreRegistry().registerComponent(PlayerPlacedBlockComponent.class, "PlayerPlacedBlockComponent", PlayerPlacedBlockComponent.CODEC);
+        this.playerPlacedBlockComponent = this.getChunkStoreRegistry().registerComponent(PlayerPlacedBlockComponent.class, "PlayerPlacedBlockComponent", PlayerPlacedBlockComponent.CODEC);
     }
 
     public static HyMMOPlugin get(){
@@ -77,7 +78,7 @@ public class HyMMOPlugin extends JavaPlugin {
         return playerXpDataComponent;
     }
 
-    public ComponentType<EntityStore, PlayerPlacedBlockComponent> getPlayerPlacedBlockComponent(){
+    public ComponentType<ChunkStore, PlayerPlacedBlockComponent> getPlayerPlacedBlockComponent(){
         return playerPlacedBlockComponent;
     }
 
