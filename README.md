@@ -49,3 +49,6 @@ AppData\Roaming\any
 ```
 
 > You can change or override this path in the run configuration or Gradle settings (build.gradle.kts) if needed.
+
+## Thanks
+- https://github.com/AzureDoom/LevelingCore
