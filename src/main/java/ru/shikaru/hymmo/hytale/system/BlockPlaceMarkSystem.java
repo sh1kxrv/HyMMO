@@ -38,11 +38,8 @@ public class BlockPlaceMarkSystem extends EntityEventSystem<EntityStore, PlaceBl
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
         Player player = store.getComponent(ref, Player.getComponentType());
 
-        var uuid = store.getComponent(ref, UUIDComponent.getComponentType());
         var blockTarget = event.getTargetBlock();
-
         var world = player.getWorld();
-
         var worldChunkStore = world.getChunkStore();
 
         long chunkIndex = ChunkUtil.indexChunkFromBlock(blockTarget.x, blockTarget.z);
@@ -54,12 +51,11 @@ public class BlockPlaceMarkSystem extends EntityEventSystem<EntityStore, PlaceBl
             var component = chunkStore.getComponent(chunkRef, PlayerPlacedBlockComponent.getComponentType());
             HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Adding component? :: %b", component != null);
             if(component == null) {
-                var hashMap = new HashSet<String>();
-                hashMap.add(uuid.getUuid() + ":" + blockIndex);
+                var hashMap = new HashSet<Integer>();
+                hashMap.add(blockIndex);
                 chunkStore.addComponent(chunkRef, PlayerPlacedBlockComponent.getComponentType(), new PlayerPlacedBlockComponent(hashMap));
             } else {
-                component.getPlacedBlocksIDs().add(uuid.getUuid() + ":" + blockIndex);
-                HyMMOPlugin.get().pluginLogger.at(Level.INFO).log("Placed blocks: %s", String.join(",", component.getPlacedBlocksIDs()));
+                component.getPlacedBlocksIDs().add(blockIndex);
             }
         }
     }

@@ -14,49 +14,52 @@ import javax.annotation.Nonnull;
 import ru.shikaru.hymmo.HyMMOPlugin;
 
 public class PlayerPlacedBlockComponent implements Component<ChunkStore> {
-    private static final ArrayCodec<String> STRING_ARRAY_CODEC = new ArrayCodec<>(Codec.STRING, String[]::new);
+    private static final ArrayCodec<Integer> INT_ARRAY_CODEC = new ArrayCodec<>(Codec.INTEGER, Integer[]::new);
 
     public static final BuilderCodec<PlayerPlacedBlockComponent> CODEC =
             BuilderCodec.builder(PlayerPlacedBlockComponent.class, PlayerPlacedBlockComponent::new)
             .append(
-                    new KeyedCodec<>("PlacedBlocksIDs", STRING_ARRAY_CODEC),
+                    new KeyedCodec<>("BlockIndexes", INT_ARRAY_CODEC),
                     (ppbc, data, extra) -> {
-                        ppbc.placedBlocksIDs.clear();
+                        ppbc.blocksIds.clear();
                         if(data == null) return;
-                        ppbc.placedBlocksIDs.addAll(Arrays.asList(data));
+                        ppbc.blocksIds.addAll(Arrays.asList(data));
                     },
-                    (ppbc, extra) ->  ppbc.placedBlocksIDs.toArray(new String[]{})
+                    (ppbc, extra) ->  ppbc.blocksIds.toArray(new Integer[]{})
             )
             .add().build();
 
-    private final Set<String> placedBlocksIDs;
+    private final Set<Integer> blocksIds;
 
     public PlayerPlacedBlockComponent() {
-        this(new HashSet<String>());
+        this(new HashSet<Integer>());
     }
 
-    public PlayerPlacedBlockComponent(HashSet<String> list) {
-        this.placedBlocksIDs = list;
+    public PlayerPlacedBlockComponent(Set<Integer> list) {
+        this.blocksIds = list;
     }
 
-    public PlayerPlacedBlockComponent(String[] arr) {
-        var hashSet = new HashSet<String>();
+    public PlayerPlacedBlockComponent(Integer[] arr) {
+        var hashSet = new HashSet<Integer>();
         hashSet.addAll(List.of(arr));
-        this.placedBlocksIDs = hashSet;
+        this.blocksIds = hashSet;
     }
 
-    public Set<String> getPlacedBlocksIDs() {
-        return placedBlocksIDs;
+    public Set<Integer> getPlacedBlocksIDs() {
+        return blocksIds;
     }
 
-    public boolean has(UUID playerId, int blockIndex){
-        var fullId = playerId + ":" + blockIndex;
-        return this.placedBlocksIDs.contains(fullId);
+    public boolean has(int blockIndex){
+        return this.blocksIds.contains(blockIndex);
+    }
+
+    public void remove(int blockIndex){
+        this.blocksIds.remove(blockIndex);
     }
 
     @Override
     public Component<ChunkStore> clone() {
-        return new PlayerPlacedBlockComponent(this.placedBlocksIDs.toArray(new String[]{}));
+        return new PlayerPlacedBlockComponent(this.blocksIds.toArray(new Integer[]{}));
     }
 
     @Nonnull

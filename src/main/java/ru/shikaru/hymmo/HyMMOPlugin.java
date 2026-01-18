@@ -1,6 +1,5 @@
 package ru.shikaru.hymmo;
 
-import com.hypixel.hytale.common.plugin.PluginManifest;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
@@ -16,8 +15,6 @@ import ru.shikaru.hymmo.hytale.command.XpCommand;
 import ru.shikaru.hymmo.hytale.component.PlayerPlacedBlockComponent;
 import ru.shikaru.hymmo.hytale.component.PlayerXpComponent;
 import ru.shikaru.hymmo.hytale.component.skills.WoodcuttingSkillComponent;
-import ru.shikaru.hymmo.hytale.module.SkillModule;
-import ru.shikaru.hymmo.hytale.module.XpModule;
 import ru.shikaru.hymmo.hytale.system.BlockPlaceMarkSystem;
 import ru.shikaru.hymmo.hytale.system.BreakBlockXPGainSystem;
 import ru.shikaru.hymmo.hytale.system.KillXPGainSystem;
@@ -25,9 +22,6 @@ import ru.shikaru.hymmo.hytale.system.XPRegistrarSystem;
 
 public class HyMMOPlugin extends JavaPlugin {
     private static HyMMOPlugin instance;
-
-    @Nonnull
-    public static final PluginManifest MANIFEST = PluginManifest.corePlugin(HyMMOPlugin.class).depends(SkillModule.class, XpModule.class).build();
 
     private ComponentType<EntityStore, PlayerXpComponent> playerXpDataComponent;
     private ComponentType<EntityStore, WoodcuttingSkillComponent> woodcuttingSkillComponent;
