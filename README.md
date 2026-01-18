@@ -1,4 +1,4 @@
-# Hytale Plugin Template
+# Hytale MMO Plugin
 
 A minimal template for developing plugins for **Hytale**
 
