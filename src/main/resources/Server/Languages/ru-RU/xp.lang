@@ -1,0 +1,3 @@
+hymmo.gain = Получено {xp} ед. опыта
+hymmo.xpamount = У вас {xp} ед. опыта и {level} уровень
+hymmo.lvlup = У вас новый уровень! {oldLevel} -> {newLevel}

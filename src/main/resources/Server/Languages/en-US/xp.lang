@@ -1,0 +1,3 @@
+hymmo.gain = Gained {xp} exp.
+hymmo.xpamount = You have {xp} exp. and {level} lvl.
+hymmo.lvlup = Level Up! {oldLevel} -> {newLevel}

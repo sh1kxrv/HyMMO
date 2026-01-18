@@ -89,6 +89,8 @@ tasks {
         workingDir = serverDir
         classpath = files(serverJar)
 
+        standardInput = System.`in`
+
         args(
             "--allow-op",
             "--disable-sentry",
